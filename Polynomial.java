@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.BufferedWriter;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,15 +26,25 @@ public class Polynomial {
 
         for (int i = 0; i < compo.length; i++) {
             String c = compo[i];
-            if (c.indexOf("x") == -1) {
+            if (c.indexOf('x') == -1) {
                 c_arr[i] = Double.parseDouble(c);
                 e_arr[i] = 0;
             } else {
                 if (c.charAt(0) == '+') {
                     c = c.split("\\+", 2)[1];
                 }
-                c_arr[i] = Double.parseDouble(c.split("x", 2)[0]);
-                e_arr[i] = Integer.parseInt(c.split("x", 2)[1]);
+                // coeff = 1
+                if (c.charAt(0) != 'x'){
+                    c_arr[i] = Double.parseDouble(c.split("x", 2)[0]);
+                } else {
+                    c_arr[i] = 1.0;
+                }
+                //expo = 1
+                if (c.charAt(c.length()-1) == 'x'){
+                    e_arr[i] = 1;
+                } else {
+                    e_arr[i] = Integer.parseInt(c.split("x", 2)[1]);
+                }
             }
         }
 
@@ -189,36 +198,39 @@ public class Polynomial {
 
     public void saveToFile(String s){
         try {
-            BufferedWriter w = new BufferedWriter(new FileWriter(s));
-            
+            FileWriter w = new FileWriter(s);
+            String st = "";
             for (int i=0; i<this.coeff.length; i++){
-                String st = "";
                 String sign = "";
                 if(this.coeff[i]>0){
                     sign = "+";
+                }
                 //first num no sign before coeff
-                    if (i==0){
-                        sign = "";
-                    }
-                    if (this.expo[i]!=0){
-                        if (this.coeff[i]!=1){
-                            if (this.expo[i]==1){
-                                st = st + sign + this.coeff[i]  + "x";
-                            } else {
-                                st = st + sign + this.coeff[i]  + "x" + this.expo[i];
-                            }
+                if (i==0){
+                    sign = "";
+                }
+                if (this.expo[i]!=0){
+                    if (this.coeff[i]!=1){
+                        if (this.expo[i]==1){
+                            st = st + sign + this.coeff[i]  + "x";
+                        } else {
+                            st = st + sign + this.coeff[i]  + "x" + this.expo[i];
+                        }
+                    } else {
+                        if (this.expo[i]==1){
+                            st = st + sign + "x";
                         } else {
                             st = st + sign + "x" + this.expo[i];
                         }
-                    } else {
-                        st = st + sign + this.coeff[i];
                     }
+                } else {
+                    st = st + sign + this.coeff[i];
                 }
-                w.write(st);
             }
-            
+            w.write(st);
             w.close();
         } catch (Exception e){
+            e.getStackTrace();
         }
     }
 }
