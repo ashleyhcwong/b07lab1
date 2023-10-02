@@ -23,7 +23,8 @@ public class Driver {
 
         Polynomial s2 = p2.add(p1);  
         System.out.println(s2.evaluate(1));  
-        System.out.println(s2.evaluate(-2)); 
+        System.out.println(s2.evaluate(-2));
+        System.out.println(s2.hasRoot(1)); 
 
         Polynomial m1 = p3.multiply(p2);  
         Polynomial m2 = p2.multiply(p1);  
